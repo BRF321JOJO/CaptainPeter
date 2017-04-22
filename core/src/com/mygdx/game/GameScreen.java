@@ -24,6 +24,7 @@ public class GameScreen implements Screen {
 
     //Initialized Objects: Order of spawning in
     Player player;
+    Laser laser;
 
     //CONSTRUCTOR
     public GameScreen(MyGdxGame game) {
@@ -37,7 +38,7 @@ public class GameScreen implements Screen {
 
         //All following: Makes one or multiple new objects
         player = new Player(game.batch);
-
+        laser = new Laser(game.batch);
     }
 
     //METHODS
@@ -56,6 +57,7 @@ public class GameScreen implements Screen {
 
         game.batch.begin();
         player.render();
+        laser.render();
 
         game.batch.end();
     }
@@ -74,9 +76,9 @@ public class GameScreen implements Screen {
 
     //Methods
 
-
     public void update(float delta) {
         player.update(delta);
+        laser.update(delta);
     }
 }
 
