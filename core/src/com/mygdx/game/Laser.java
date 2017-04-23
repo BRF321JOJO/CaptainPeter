@@ -18,7 +18,7 @@ public class Laser extends Entity{
         super (
                 new Texture("laser.png"),
                     Constant.HoldingArea,
-                    0,
+                    1000,
                     15,
                     100,
                     0,
@@ -38,9 +38,11 @@ public class Laser extends Entity{
 
             //Sets laser at 100 (only if off screen)
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                posx= Player.x+(50-7);
-                posy=100;
-                System.out.println("Pew, you shot a laser!");
+                if(posy> MyGdxGame.V_HEIGHT) {
+                    posx = Player.x + (50 - 7);
+                    posy = 100;
+                    System.out.println("Pew, you shot a laser!");
+                }
             }
 
             //Moves laser right (only if on screen)
@@ -55,7 +57,7 @@ public class Laser extends Entity{
             //posy of laser depends on Player posy. [In GameScreen, update method]
 
             //moves laser up
-            if(posx>0 && posy <720){
+            if(posy <720){
                 posy++;
             }
         }
