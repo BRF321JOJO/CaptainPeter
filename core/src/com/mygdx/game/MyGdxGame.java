@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class MyGdxGame extends Game {
 	SpriteBatch batch;
-	public static final int V_WIDTH = 1000;
-	public static final int V_HEIGHT = 1000;
+	public static final int V_WIDTH = 1280;
+	public static final int V_HEIGHT = 720;
 
 	@Override
 	public void create () {

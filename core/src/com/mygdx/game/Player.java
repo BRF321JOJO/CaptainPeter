@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  */
 public class Player extends Entity {
 
+    static int x;
+
     public Player(SpriteBatch batch) {
         super(
                 new Texture("badlogic.jpg"),
@@ -30,17 +32,23 @@ public class Player extends Entity {
 
     public void update(float delta) {
 
-        posx += velx;
+        x=posx;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            velx = -CPlayer.Spaceshipspeed;
-        }
-        else if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            velx = CPlayer.Spaceshipspeed;
-        }
+        posx += velx;
+        //if(posx>0 && posx<(MyGdxGame.V_WIDTH-width)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                if(posx>0) {
+                    velx = -CPlayer.Spaceshipspeed;
+                }else {velx = 0;}
+            } else if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                if(posx<(MyGdxGame.V_WIDTH-width)) {
+                    velx = CPlayer.Spaceshipspeed;
+                }else {velx = 0;}
+            }else {velx = 0;}
+        //}else {velx=0;}
 
         //Prevents player from moving when button not pressed
-        else {velx = 0;}
+
     }
 
     @Override

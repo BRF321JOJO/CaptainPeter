@@ -38,7 +38,8 @@ public class Laser extends Entity{
 
             //Sets laser at 100 (only if off screen)
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                posx = 100;
+                posx= Player.x+(50-7);
+                posy=100;
                 System.out.println("Pew, you shot a laser!");
             }
 
@@ -52,6 +53,11 @@ public class Laser extends Entity{
                 posx = Constant.HoldingArea;
             }
             //posy of laser depends on Player posy. [In GameScreen, update method]
+
+            //moves laser up
+            if(posx>0 && posy <720){
+                posy++;
+            }
         }
 
     @Override

@@ -30,6 +30,8 @@ public class GameScreen implements Screen {
     public GameScreen(MyGdxGame game) {
         this.game = game;
 
+        Laser[] lasers = new Laser[10];
+
         LEVEL_WIDTH = MyGdxGame.V_WIDTH;
         LEVEL_HEIGHT = MyGdxGame.V_HEIGHT;
         gameCam = new OrthographicCamera();
