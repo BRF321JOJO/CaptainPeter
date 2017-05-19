@@ -13,16 +13,18 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class Laser extends Entity{
 
     static boolean InBound;
+    static int HoldingArea = 2000;
 
     public Laser(SpriteBatch batch) {
         super (
-                new Texture("laser.png"),
-                    Constant.HoldingArea,
-                    0,
+                new Texture("Up laser.png"),
+                    HoldingArea,
+                    //Equal to height of player + posy of player
+                    50 + 10,
                     15,
-                    100,
+                    50,
                     0,
-                    10,
+                    6,
                     0,
                     batch
             );
@@ -31,32 +33,26 @@ public class Laser extends Entity{
         public void update(float delta) {
 
             //Defines InBound
-            if (posy <=0 || posy >= 1000) {
-                InBound = false;
-            } else {InBound = true;}
+            if (posx >=0 && posx <= MyGdxGame.V_WIDTH) {
+                InBound = true;
+            } else {InBound = false;}
 
 
-            //Sets laser at 100 (only if off screen)
-            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                posx= Player.x+(50-7);
-                posy=100;
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !InBound) {
+                //Resets y position
+                posy = 50 + 10;
+                //posx of laser depends on Player posx. [In GameScreen, update method]
                 System.out.println("Pew, you shot a laser!");
             }
 
-            //Moves laser right (only if on screen)
-            else if (InBound) {
-                posy += vely;
+            //Moves laser up
+            if(InBound){
+                posy+= vely;
             }
 
             //Puts laser back to hold area once off screen
-            if (posy == 1000) {
-                posx = Constant.HoldingArea;
-            }
-            //posy of laser depends on Player posy. [In GameScreen, update method]
-
-            //moves laser up
-            if(posx>0 && posy <720){
-                posy++;
+            if (posy >= MyGdxGame.V_HEIGHT) {
+                posx = HoldingArea;
             }
         }
 

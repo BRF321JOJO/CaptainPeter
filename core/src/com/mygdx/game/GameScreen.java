@@ -15,7 +15,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class GameScreen implements Screen {
 
-    //FIELDS
     private MyGdxGame game;
     private OrthographicCamera gameCam;
     private Viewport gamePort;
@@ -30,20 +29,16 @@ public class GameScreen implements Screen {
     public GameScreen(MyGdxGame game) {
         this.game = game;
 
-        Laser[] lasers = new Laser[10];
-
         LEVEL_WIDTH = MyGdxGame.V_WIDTH;
         LEVEL_HEIGHT = MyGdxGame.V_HEIGHT;
         gameCam = new OrthographicCamera();
         gamePort = new ExtendViewport(LEVEL_WIDTH, LEVEL_HEIGHT, gameCam);
-
 
         //All following: Makes one or multiple new objects
         player = new Player(game.batch);
         laser = new Laser(game.batch);
     }
 
-    //METHODS
     @Override
     public void show() {}
 
@@ -81,6 +76,11 @@ public class GameScreen implements Screen {
     public void update(float delta) {
         player.update(delta);
         laser.update(delta);
+
+        //Shoots laser based from player posx (only if off screen)
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !Laser.InBound) {
+            laser.posx = player.posx + player.width/2;
+        }
     }
 }
 
