@@ -21,12 +21,14 @@ public abstract class Entity {
     public static ArrayList<Entity> entities = new ArrayList<Entity>();
 
     //CONSTRUCTOR
-    public Entity(Texture texture, int posx, int posy, int width, int height, int velx, int vely, int ID, SpriteBatch batch){
+    //Can make values doubles and correct by changing to int when defining this. to allow use of doubles elsewhere
+    //Note: The field values are left as int above
+    public Entity(Texture texture, int posx, int posy, int width, double height, int velx, int vely, int ID, SpriteBatch batch){
         this.texture = texture;
         this.posx = posx;
         this.posy = posy;
         this.width = width;
-        this.height = height;
+        this.height = (int)height;
         this.velx = velx;
         this.vely = vely;
         this.ID = ID;

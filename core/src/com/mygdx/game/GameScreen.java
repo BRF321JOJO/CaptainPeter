@@ -24,6 +24,11 @@ public class GameScreen implements Screen {
     //Initialized Objects: Order of spawning in
     Player player;
     Laser laser;
+    Shield[] shield;
+    Invaders[] invaders;
+
+    //Normal variables
+
 
     //CONSTRUCTOR
     public GameScreen(MyGdxGame game) {
@@ -37,6 +42,26 @@ public class GameScreen implements Screen {
         //All following: Makes one or multiple new objects
         player = new Player(game.batch);
         laser = new Laser(game.batch);
+
+        shield = new Shield[Shield.numberofshields];
+        //Value i should be from 0 to 1 less than above number
+        for (int i = 0; i <= (Shield.numberofshields - 1); i++) {
+            //Value multiplied is space between spawned pipes and has a starting value from left of screen added
+            //Values based off screen width and number of shields
+            //Must account for width of shield
+            shield[i] = new Shield(game.batch , (i * MyGdxGame.V_WIDTH / (Shield.numberofshields + 1)
+                    + MyGdxGame.V_WIDTH / (Shield.numberofshields + 1) - (Shield.shieldwidth/2)));
+            //Value should be total width divided by 4
+
+            //Adds shield to entity ArrayList
+            Entity.entities.add(shield[i]);
+        }
+
+        invaders = new Invaders[Invaders.numberofinvaders];
+        for (int i = 0; i<=(Invaders.numberofinvaders - 1); i++) {
+            invaders[i] = new Invaders(game.batch, (i * MyGdxGame.V_WIDTH / (Invaders.numberofinvaders + 1)
+                    + MyGdxGame.V_WIDTH / (Invaders.numberofinvaders + 1) - (Invaders.invaderswidth/2)));
+        }
     }
 
     @Override
@@ -55,7 +80,12 @@ public class GameScreen implements Screen {
         game.batch.begin();
         player.render();
         laser.render();
-
+        for (int i = 0; i <= (Shield.numberofshields - 1); i++) {
+            shield[i].render();
+        }
+        for (int i = 0; i<=(Invaders.numberofinvaders - 1); i++) {
+            invaders[i].render();
+        }
         game.batch.end();
     }
 
@@ -74,13 +104,37 @@ public class GameScreen implements Screen {
     //Methods
 
     public void update(float delta) {
+        //Update methods
         player.update(delta);
         laser.update(delta);
+        for (int i = 0; i <= (Shield.numberofshields - 1); i++) {
+            shield[i].update(delta);
+        }
+        for (int i = 0; i<=(Invaders.numberofinvaders - 1); i++) {
+            invaders[i].update(delta);
+        }
+
+        //Methods of Game Screen
+
 
         //Shoots laser based from player posx (only if off screen)
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !Laser.InBound) {
             laser.posx = player.posx + player.width/2;
         }
+
+        //Checks for collision. Comes from Entity class. Collision happens after everything updates.
+        //Note: Only checks collision for things defined, not all entities
+        //Generally tests an entity collides with anything on the list of entities
+        for (Entity e : Entity.entities) {
+
+            //Checks collision for laser specifically
+            if (laser.isCollide(e)) {
+                //Says all handling denoted within respective class
+                laser.handleCollision(e);
+                e.handleCollision(laser);
+            }
+        }
+        //End of update method
     }
 }
 

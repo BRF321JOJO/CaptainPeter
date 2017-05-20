@@ -14,17 +14,18 @@ public class Laser extends Entity{
 
     static boolean InBound;
     static int HoldingArea = 2000;
+    static int laserheight = 30;
 
     public Laser(SpriteBatch batch) {
         super (
                 new Texture("Up laser.png"),
                     HoldingArea,
                     //Equal to height of player + posy of player
-                    50 + 10,
-                    15,
-                    50,
+                    laserheight + Player.playerposy,
+                    10,
+                    laserheight,
                     0,
-                    6,
+                    8,
                     0,
                     batch
             );
@@ -40,7 +41,7 @@ public class Laser extends Entity{
 
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !InBound) {
                 //Resets y position
-                posy = 50 + 10;
+                posy = laserheight + Player.playerposy;
                 //posx of laser depends on Player posx. [In GameScreen, update method]
                 System.out.println("Pew, you shot a laser!");
             }
@@ -60,6 +61,7 @@ public class Laser extends Entity{
     public void render() {batch.draw(texture, posx, posy, width, height);}
     @Override
     public void handleCollision(Entity e) {
-
+        //If collides, set back to holding area to be able to be shot again
+        posx = HoldingArea;
     }
 }

@@ -13,15 +13,16 @@ public class Player extends Entity {
 
     static boolean InBound;
     static int Spaceshipspeed = 4;
+    static int playerposy = 10;
+    static int shipwidth = 50;
 
     public Player(SpriteBatch batch) {
         super(
                 new Texture("badlogic.jpg"),
                 //Posx will begin at calculated middle of screen
-                //(Width of screen) divided by 2 minus (width of ship) divided by 2
-                MyGdxGame.V_WIDTH/2 - 50/2,
-                10,
-                50,
+                MyGdxGame.V_WIDTH/2 - shipwidth/2,
+                playerposy,
+                shipwidth,
                 50,
                 0,
                 0,
@@ -35,7 +36,7 @@ public class Player extends Entity {
     public void update(float delta) {
 
         //Defines InBound
-        if (posx >= 0 && posx <= MyGdxGame.V_WIDTH - width) {
+        if (posx >= 0 && posx <= MyGdxGame.V_WIDTH - shipwidth) {
             InBound = true;
         } else {InBound = false;}
 
@@ -51,7 +52,7 @@ public class Player extends Entity {
             } else {velx = 0;}
         }
         else if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            if(posx <= MyGdxGame.V_WIDTH - width) {
+            if(posx <= MyGdxGame.V_WIDTH - shipwidth) {
                 velx = Spaceshipspeed;
             } else {velx = 0;}
         }
