@@ -9,6 +9,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -78,6 +79,7 @@ public class GameScreen implements Screen {
         game.batch.enableBlending();
 
         game.batch.begin();
+        game.batch.draw(new Texture("bg.jpg"), 0, 0);
         player.render();
         laser.render();
         for (int i = 0; i <= (Shield.numberofshields - 1); i++) {
