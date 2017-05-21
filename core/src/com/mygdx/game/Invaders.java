@@ -14,7 +14,6 @@ public class Invaders extends Entity{
     static int invaderswidth = 50;
     static boolean InBound;
     static boolean movingright = true;
-    static boolean movingleft;
 
     public Invaders(SpriteBatch batch, int posx) {
         super(

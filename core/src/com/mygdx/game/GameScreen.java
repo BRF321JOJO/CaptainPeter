@@ -79,7 +79,6 @@ public class GameScreen implements Screen {
         game.batch.enableBlending();
 
         game.batch.begin();
-        game.batch.draw(new Texture("bg.jpg"), 0, 0);
         player.render();
         laser.render();
         for (int i = 0; i <= (Shield.numberofshields - 1); i++) {
