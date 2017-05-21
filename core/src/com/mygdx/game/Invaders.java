@@ -10,19 +10,25 @@ public class Invaders extends Entity{
 
     //Need sprite page.
 
-    static int numberofinvaders = 1;
+    static int numberofinvaders = 11;
     static int invaderswidth = 50;
     static boolean InBound;
     static boolean movingright = true;
+    int counter = 0;
+    //Controls int counter for how often invader moves
+    int invadermovespeed = 25;
+    int invadermoveammount = 25;
+    int edgesofmovement = 20;
+    int ammountmovedown = 75;
 
     public Invaders(SpriteBatch batch, int posx) {
         super(
-                new Texture("badlogic.jpg"),
+                new Texture("SpaceInvaderrainbow.png"),
                 posx,
                 600,
                 invaderswidth,
                 50,
-                1,
+                0,
                 0,
                 0,
                 batch
@@ -37,27 +43,39 @@ public class Invaders extends Entity{
             InBound = true;
         } else {InBound = false;}
 
-
-        //Code which moves them
-
         //Equates velx to posx
         posx += velx;
 
-        //Moves side to side
-        //Goes right, and if is false, goes left
-        if (InBound && movingright) {
-            posx += 10;
-        } else {posx -= 10;}
+        //int counter for code not every frame
+        counter++;
 
-        //Moves down and makes sets it go opposite direction once gets far enough to side of screen
-        if (posx  <= 20) {
-            posy -= 20;
-            movingright = true;
-        }
-        //Corrects for width of invader
-        if (posx >= MyGdxGame.V_WIDTH - 20 - invaderswidth) {
-            posy -=20;
-            movingright = false;
+        //All within int counter to slow movement
+        //Happens every x frames
+        if (counter % invadermovespeed == 0) {
+
+            //Moves side to side (only if InBound)
+            if (InBound) {
+                //Goes right, and if is false, goes left
+                if (movingright) {
+                    posx += invadermoveammount;
+                } else if (!movingright) {
+                    posx -= invadermoveammount;
+                }
+
+                //Following two if statements moves down and makes go opposite direction once close enough to sides
+                //Also, corrects for slow drift right and left
+                if (posx <= edgesofmovement) {
+                    posx = edgesofmovement;
+                    posy -= ammountmovedown;
+                    movingright = true;
+                }
+                //(Corrects for width of invader)
+                if (posx >= MyGdxGame.V_WIDTH - edgesofmovement - invaderswidth) {
+                    posx = MyGdxGame.V_WIDTH - edgesofmovement - invaderswidth;
+                    posy -= ammountmovedown;
+                    movingright = false;
+                }
+            }
         }
     }
 

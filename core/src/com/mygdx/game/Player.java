@@ -18,7 +18,7 @@ public class Player extends Entity {
 
     public Player(SpriteBatch batch) {
         super(
-                new Texture("badlogic.jpg"),
+                new Texture("Petersmiletransparent.png"),
                 //Posx will begin at calculated middle of screen
                 MyGdxGame.V_WIDTH/2 - shipwidth/2,
                 playerposy,

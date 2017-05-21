@@ -45,23 +45,23 @@ public class GameScreen implements Screen {
         laser = new Laser(game.batch);
 
         shield = new Shield[Shield.numberofshields];
-        //Value i should be from 0 to 1 less than above number
         for (int i = 0; i <= (Shield.numberofshields - 1); i++) {
-            //Value multiplied is space between spawned pipes and has a starting value from left of screen added
             //Values based off screen width and number of shields
             //Must account for width of shield
             shield[i] = new Shield(game.batch , (i * MyGdxGame.V_WIDTH / (Shield.numberofshields + 1)
+                    //Calculates center of screen
                     + MyGdxGame.V_WIDTH / (Shield.numberofshields + 1) - (Shield.shieldwidth/2)));
-            //Value should be total width divided by 4
 
-            //Adds shield to entity ArrayList
+            //Adds shield to entities
             Entity.entities.add(shield[i]);
         }
 
         invaders = new Invaders[Invaders.numberofinvaders];
         for (int i = 0; i<=(Invaders.numberofinvaders - 1); i++) {
-            invaders[i] = new Invaders(game.batch, (i * MyGdxGame.V_WIDTH / (Invaders.numberofinvaders + 1)
-                    + MyGdxGame.V_WIDTH / (Invaders.numberofinvaders + 1) - (Invaders.invaderswidth/2)));
+            invaders[i] = new Invaders(game.batch, (i * 75)
+                    + MyGdxGame.V_WIDTH / (Invaders.numberofinvaders + 1) - (Invaders.invaderswidth/2));
+            //Adds invaders to entities
+            Entity.entities.add(invaders[i]);
         }
     }
 
@@ -123,6 +123,8 @@ public class GameScreen implements Screen {
             laser.posx = player.posx + player.width/2;
         }
 
+
+
         //Checks for collision. Comes from Entity class. Collision happens after everything updates.
         //Note: Only checks collision for things defined, not all entities
         //Generally tests an entity collides with anything on the list of entities
@@ -134,6 +136,7 @@ public class GameScreen implements Screen {
                 laser.handleCollision(e);
                 e.handleCollision(laser);
             }
+
         }
         //End of update method
     }

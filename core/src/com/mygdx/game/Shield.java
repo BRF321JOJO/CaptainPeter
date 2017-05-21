@@ -19,7 +19,7 @@ public class Shield extends Entity{
 
     public Shield(SpriteBatch batch, int posx) {
         super(
-                new Texture("badlogic.jpg"),
+                new Texture("Captainpetertransparent.png"),
                 posx,
                 100,
                 shieldwidth,
@@ -50,7 +50,7 @@ public class Shield extends Entity{
             posx = Laser.HoldingArea;
         }
 
-        //Below idea based off of damage coutner
+        //Below idea based off of damage couter
 
         //Want to individualize damage values for shields
         //damagevalue++;
