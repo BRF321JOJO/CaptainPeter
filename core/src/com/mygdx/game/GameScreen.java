@@ -21,12 +21,15 @@ public class GameScreen implements Screen {
     private Viewport gamePort;
     private final int LEVEL_WIDTH;
     private final int LEVEL_HEIGHT;
+    private Texture bg = new Texture("bg.jpg");
 
     //Initialized Objects: Order of spawning in
     Player player;
     Laser laser;
+    Laser invaderlaser;
     Shield[] shield;
     Invaders[] invaders;
+    boolean gameover;
 
     //Normal variables
 
@@ -34,16 +37,18 @@ public class GameScreen implements Screen {
     //CONSTRUCTOR
     public GameScreen(MyGdxGame game) {
         this.game = game;
+        gameover=false;
 
         LEVEL_WIDTH = MyGdxGame.V_WIDTH;
         LEVEL_HEIGHT = MyGdxGame.V_HEIGHT;
         gameCam = new OrthographicCamera();
         gamePort = new ExtendViewport(LEVEL_WIDTH, LEVEL_HEIGHT, gameCam);
+        invaderlaser.HoldingArea=3000;
 
         //All following: Makes one or multiple new objects
         player = new Player(game.batch);
         laser = new Laser(game.batch);
-
+        invaderlaser = new Laser(game.batch);
         shield = new Shield[Shield.numberofshields];
         for (int i = 0; i <= (Shield.numberofshields - 1); i++) {
             //Values based off screen width and number of shields
@@ -55,7 +60,8 @@ public class GameScreen implements Screen {
             //Adds shield to entities
             Entity.entities.add(shield[i]);
         }
-
+        invaderlaser.vely=-8;
+        invaderlaser.laserid=1;
         invaders = new Invaders[Invaders.numberofinvaders];
         for (int i = 0; i<=(Invaders.numberofinvaders - 1); i++) {
             invaders[i] = new Invaders(game.batch, (i * 75)
@@ -63,6 +69,7 @@ public class GameScreen implements Screen {
             //Adds invaders to entities
             Entity.entities.add(invaders[i]);
         }
+        Entity.entities.add(player);
     }
 
     @Override
@@ -79,8 +86,10 @@ public class GameScreen implements Screen {
         game.batch.enableBlending();
 
         game.batch.begin();
+        game.batch.draw(bg, 0, 0, LEVEL_WIDTH, LEVEL_HEIGHT);
         player.render();
         laser.render();
+        invaderlaser.render();
         for (int i = 0; i <= (Shield.numberofshields - 1); i++) {
             shield[i].render();
         }
@@ -106,37 +115,75 @@ public class GameScreen implements Screen {
 
     public void update(float delta) {
         //Update methods
-        player.update(delta);
-        laser.update(delta);
-        for (int i = 0; i <= (Shield.numberofshields - 1); i++) {
-            shield[i].update(delta);
-        }
-        for (int i = 0; i<=(Invaders.numberofinvaders - 1); i++) {
-            invaders[i].update(delta);
-        }
-
-        //Methods of Game Screen
-
-
-        //Shoots laser based from player posx (only if off screen)
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !Laser.InBound) {
-            laser.posx = player.posx + player.width/2;
-        }
-
-
-
-        //Checks for collision. Comes from Entity class. Collision happens after everything updates.
-        //Note: Only checks collision for things defined, not all entities
-        //Generally tests an entity collides with anything on the list of entities
-        for (Entity e : Entity.entities) {
-
-            //Checks collision for laser specifically
-            if (laser.isCollide(e)) {
-                //Says all handling denoted within respective class
-                laser.handleCollision(e);
-                e.handleCollision(laser);
+        if(!gameover) {
+            player.update(delta);
+            laser.update(delta);
+            for (int i = 0; i <= (Shield.numberofshields - 1); i++) {
+                shield[i].update(delta);
+            }
+            for (int i = 0; i <= (Invaders.numberofinvaders - 1); i++) {
+                invaders[i].update(delta);
             }
 
+            //Methods of Game Screen
+            for (int i = 0; i <= (Invaders.numberofinvaders - 1); i++) {
+                System.out.println(invaderlaser.posx);
+                if (invaders[i].posx == player.posx && !invaderlaser.InBound) {
+                    System.out.println("true");
+                    invaderlaser.posx = (invaders[i].posx + invaders[i].width / 2);
+                    invaderlaser.posy = invaders[i].posy;
+                    invaderlaser.vely = -10;
+                    System.out.println(invaderlaser.vely);
+                }
+            }
+            invaderlaser.update(delta);
+
+
+            //Shoots laser based from player posx (only if off screen)
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !laser.InBound) {
+                laser.posx = player.posx + player.width / 2;
+            }
+
+
+            //Checks for collision. Comes from Entity class. Collision happens after everything updates.
+            //Note: Only checks collision for things defined, not all entities
+            //Generally tests an entity collides with anything on the list of entities
+            for (Entity e : Entity.entities) {
+
+                //Checks collision for laser specifically
+                if (laser.isCollide(e)) {
+                    //Says all handling denoted within respective class
+                    if(e.ID!=2) {
+                        laser.handleCollision(e);
+                        e.handleCollision(laser);
+                    }
+                }
+                if (invaderlaser.isCollide(e)) {
+                    //Says all handling denoted within respective class
+
+                    if (e.ID != 1 && e.ID!=2) {
+                        invaderlaser.handleCollision(e);
+                        e.handleCollision(invaderlaser);
+                    }
+                    if (e.ID == 2) {
+                        gameover = true;
+                        System.out.println(gameover);
+
+                    }
+                }
+
+            }
+        }
+        if(gameover){
+            if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
+                gameover=false;
+                for (Entity e : Entity.entities) {
+                    if (invaderlaser.isCollide(e)) {
+                        invaderlaser.handleCollision(e);
+                        e.handleCollision(invaderlaser);
+                    }
+                }
+            }
         }
         //End of update method
     }

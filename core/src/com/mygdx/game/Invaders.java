@@ -30,7 +30,7 @@ public class Invaders extends Entity{
                 50,
                 0,
                 0,
-                0,
+                1,
                 batch
         );
     }

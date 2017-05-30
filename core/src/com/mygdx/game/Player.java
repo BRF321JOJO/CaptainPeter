@@ -26,7 +26,7 @@ public class Player extends Entity {
                 50,
                 0,
                 0,
-                0,
+                2,
                 batch
         );
     }
@@ -65,6 +65,6 @@ public class Player extends Entity {
     public void render() {batch.draw(texture, posx, posy, width, height);}
     @Override
     public void handleCollision(Entity e) {
-
+        System.out.println("ded");
     }
 }

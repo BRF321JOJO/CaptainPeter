@@ -12,9 +12,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Laser extends Entity{
 
-    static boolean InBound;
+    boolean InBound;
     static int HoldingArea = 2000;
     static int laserheight = 30;
+    int laserid=0;
 
     public Laser(SpriteBatch batch) {
         super (
@@ -34,16 +35,17 @@ public class Laser extends Entity{
         public void update(float delta) {
 
             //Defines InBound
-            if (posx >=0 && posx <= MyGdxGame.V_WIDTH) {
+            if ((posx >=0) && (posx <= 1280)) {
                 InBound = true;
             } else {InBound = false;}
 
-
-            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !InBound) {
-                //Resets y position
-                posy = laserheight + Player.playerposy;
-                //posx of laser depends on Player posx. [In GameScreen, update method]
-                System.out.println("Pew, you shot a laser!");
+            if(laserid==0) {
+                if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !InBound) {
+                    //Resets y position
+                    posy = laserheight + Player.playerposy;
+                    //posx of laser depends on Player posx. [In GameScreen, update method]
+                    System.out.println("Pew, you shot a laser!");
+                }
             }
 
             //Moves laser up
@@ -52,7 +54,7 @@ public class Laser extends Entity{
             }
 
             //Puts laser back to hold area once off screen
-            if (posy >= MyGdxGame.V_HEIGHT) {
+            if (posy >= MyGdxGame.V_HEIGHT || posy<=0) {
                 posx = HoldingArea;
             }
         }
