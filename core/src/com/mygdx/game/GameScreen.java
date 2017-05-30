@@ -30,6 +30,8 @@ public class GameScreen implements Screen {
     Shield[] shield;
     Invaders[] invaders;
     boolean gameover;
+    Laser invaderlaser2;
+    int invaderjustshot;
 
     //Normal variables
 
@@ -38,18 +40,22 @@ public class GameScreen implements Screen {
     public GameScreen(MyGdxGame game) {
         this.game = game;
         gameover=false;
+        invaderjustshot=2000;
 
         LEVEL_WIDTH = MyGdxGame.V_WIDTH;
         LEVEL_HEIGHT = MyGdxGame.V_HEIGHT;
         gameCam = new OrthographicCamera();
         gamePort = new ExtendViewport(LEVEL_WIDTH, LEVEL_HEIGHT, gameCam);
         invaderlaser.HoldingArea=3000;
+        invaderlaser.HoldingArea=4000;
+
 
         //All following: Makes one or multiple new objects
         player = new Player(game.batch);
         laser = new Laser(game.batch);
         invaderlaser = new Laser(game.batch);
         shield = new Shield[Shield.numberofshields];
+        invaderlaser2= new Laser(game.batch);
         for (int i = 0; i <= (Shield.numberofshields - 1); i++) {
             //Values based off screen width and number of shields
             //Must account for width of shield
@@ -61,6 +67,7 @@ public class GameScreen implements Screen {
             Entity.entities.add(shield[i]);
         }
         invaderlaser.vely=-8;
+        invaderlaser2.vely=-8;
         invaderlaser.laserid=1;
         invaders = new Invaders[Invaders.numberofinvaders];
         for (int i = 0; i<=(Invaders.numberofinvaders - 1); i++) {
@@ -90,6 +97,7 @@ public class GameScreen implements Screen {
         player.render();
         laser.render();
         invaderlaser.render();
+        invaderlaser2.render();
         for (int i = 0; i <= (Shield.numberofshields - 1); i++) {
             shield[i].render();
         }
@@ -127,16 +135,33 @@ public class GameScreen implements Screen {
 
             //Methods of Game Screen
             for (int i = 0; i <= (Invaders.numberofinvaders - 1); i++) {
-                System.out.println(invaderlaser.posx);
-                if (invaders[i].posx == player.posx && !invaderlaser.InBound) {
-                    System.out.println("true");
-                    invaderlaser.posx = (invaders[i].posx + invaders[i].width / 2);
-                    invaderlaser.posy = invaders[i].posy;
-                    invaderlaser.vely = -10;
-                    System.out.println(invaderlaser.vely);
+
+                if (((invaders[i].posx + invaders[i].width / 2) >= player.posx) && ((invaders[i].posx + invaders[i].width / 2) <= (player.posx + player.width)) && !invaderlaser.InBound) {
+                    if(i!=invaderjustshot) {
+                        System.out.println("true");
+                        invaderlaser.posx = (invaders[i].posx + invaders[i].width / 2);
+                        invaderlaser.posy = invaders[i].posy;
+                        invaderlaser.vely = -10;
+                        System.out.println(invaderlaser.vely);
+                        invaderjustshot = i;
+                    }
+                }
+
+
+                if (((invaders[i].posx + invaders[i].width / 2) >= player.posx) && ((invaders[i].posx + invaders[i].width / 2) <= (player.posx + player.width)) && !invaderlaser2.InBound) {
+                    if(i!=invaderjustshot) {
+                        System.out.println("true");
+                        invaderlaser2.posx = (invaders[i].posx + invaders[i].width / 2);
+                        invaderlaser2.posy = invaders[i].posy;
+                        invaderlaser2.vely = -10;
+                        System.out.println(invaderlaser2.vely);
+                        invaderjustshot=i;
+                    }
                 }
             }
             invaderlaser.update(delta);
+            invaderlaser2.update(delta);
+
 
 
             //Shoots laser based from player posx (only if off screen)
@@ -171,6 +196,19 @@ public class GameScreen implements Screen {
 
                     }
                 }
+                if (invaderlaser2.isCollide(e)) {
+                    //Says all handling denoted within respective class
+
+                    if (e.ID != 1 && e.ID!=2) {
+                        invaderlaser2.handleCollision(e);
+                        e.handleCollision(invaderlaser2);
+                    }
+                    if (e.ID == 2) {
+                        gameover = true;
+                        System.out.println(gameover);
+
+                    }
+                }
 
             }
         }
@@ -181,6 +219,10 @@ public class GameScreen implements Screen {
                     if (invaderlaser.isCollide(e)) {
                         invaderlaser.handleCollision(e);
                         e.handleCollision(invaderlaser);
+                    }
+                    if (invaderlaser2.isCollide(e)) {
+                        invaderlaser2.handleCollision(e);
+                        e.handleCollision(invaderlaser2);
                     }
                 }
             }
