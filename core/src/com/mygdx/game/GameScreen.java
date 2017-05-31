@@ -219,11 +219,25 @@ public class GameScreen implements Screen {
                     if (invaderlaser.isCollide(e)) {
                         invaderlaser.handleCollision(e);
                         e.handleCollision(invaderlaser);
+                        invaderlaser2.handleCollision(e);
+                        e.handleCollision(invaderlaser2);
                     }
                     if (invaderlaser2.isCollide(e)) {
                         invaderlaser2.handleCollision(e);
                         e.handleCollision(invaderlaser2);
+                        invaderlaser.handleCollision(e);
+                        e.handleCollision(invaderlaser);
+                        invaderlaser2.handleCollision(e);
                     }
+                }
+                for (int i = 0; i <= (Invaders.numberofinvaders - 1); i++) {
+                    invaders[i].posx=i*75;
+                    invaders[i].posy=600;
+                    invaders[i].movingright=true;
+                }
+                for (int i = 0; i <= (Shield.numberofshields - 1); i++) {
+                    shield[i].height=(int)Shield.shieldheight;
+                    shield[i].posx=(i * MyGdxGame.V_WIDTH / (Shield.numberofshields + 1) + MyGdxGame.V_WIDTH / (Shield.numberofshields + 1) - (Shield.shieldwidth/2));
                 }
             }
         }
