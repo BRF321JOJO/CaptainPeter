@@ -32,19 +32,16 @@ public class GameScreen implements Screen {
 
     Shield[] shield;
     Invaders[] invaders;
-    Music Music;
+    Music music;
 
     startScreen start;
     Blackscreen blackscreen;
     Background background;
-
-
-    //Deathscreen
-    Texture rip;
-
+    Deathscreen deathscreen;
 
     //Normal variables
     int invaderjustshot;
+    public static boolean showblackbackground = true;
     boolean gameover = false;
 
 
@@ -57,22 +54,24 @@ public class GameScreen implements Screen {
         gameCam = new OrthographicCamera();
         gamePort = new ExtendViewport(LEVEL_WIDTH, LEVEL_HEIGHT, gameCam);
 
-        Music = new Music();
-        Music.play();
+        music = new Music();
+        if (Debug.musicallow) {
+            music.play();
+        }
 
         //Startup screens
         start = new startScreen(game.batch);
         blackscreen = new Blackscreen(game.batch);
         background = new Background(game.batch);
-
-        rip = new Texture("rip.png");
+        deathscreen = new Deathscreen(game.batch);
 
         //All following: Makes one or multiple new objects
         player = new Player(game.batch);
         laser = new Laser(game.batch);
         invaderlaser = new Laser(game.batch);
-        shield = new Shield[Shield.numberofshields];
         invaderlaser2= new Laser(game.batch);
+
+        shield = new Shield[Shield.numberofshields];
         for (int i = 0; i <= (Shield.numberofshields - 1); i++) {
             //Values based off screen width and number of shields
             //Must account for width of shield
@@ -95,16 +94,16 @@ public class GameScreen implements Screen {
 
 
         //Invder varibales
-        invaderlaser.vely=-8;
-        invaderlaser2.vely=-8;
-        invaderlaser.laserid=1;
+        invaderlaser.vely = -8;
+        invaderlaser2.vely = -8;
+        invaderlaser.laserid = 1;
 
         //Defined variables
-        invaderlaser.HoldingArea=3000;
-        invaderlaser2.HoldingArea=4000;
+        invaderlaser.HoldingArea = 3000;
+        invaderlaser2.HoldingArea = 4000;
 
-        //Makes to same invader doesn't shoot twicce
-        invaderjustshot=2000;
+        //Makes to same invader doesn't shoot twice
+        invaderjustshot = 2000;
 
     }
 
@@ -136,16 +135,17 @@ public class GameScreen implements Screen {
             invaders[i].render();
         }
 
-        //if(start.showStart) {
-        blackscreen.render();
-        start.render();
-        //}
-
-        if(gameover){
+        if (showblackbackground) {
             blackscreen.render();
-            game.batch.draw(rip, start.posx, start.posy);
         }
 
+        if(start.showStart) {
+            start.render();
+        }
+
+        if(gameover){
+            deathscreen.render();
+        }
 
         game.batch.end();
     }
@@ -162,12 +162,51 @@ public class GameScreen implements Screen {
     public void dispose() {}
 
 
+    //Restarts game
     public void restartgame () {
         start.startGame = false;
         blackscreen.vely = 0;
-        blackscreen.posx = 0;
         blackscreen.posy = 0;
+
+        //Prevents start from rendering after game ends
+        start.showStart = false;
+        showblackbackground = false;
+
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
+            start.startGame = true;
+            gameover = false;
+
+            //Resets positions of entities
+            for (int i = 0; i <= (Invaders.numberofinvaders - 1); i++) {
+                invaders[i].posx=i*75;
+                invaders[i].posy=600;
+                invaders[i].movingright=true;
+            }
+            for (int i = 0; i <= (Shield.numberofshields - 1); i++) {
+                shield[i].height=(int)Shield.shieldheight;
+                shield[i].posx=(i * MyGdxGame.V_WIDTH / (Shield.numberofshields + 1) + MyGdxGame.V_WIDTH / (Shield.numberofshields + 1) - (Shield.shieldwidth/2));
+            }
+
+            //Makes lasers disappear to prevent laser from retriggering restart
+            for (Entity e : Entity.entities) {
+                if (invaderlaser.isCollide(e)) {
+                    invaderlaser.handleCollision(e);
+                    e.handleCollision(invaderlaser);
+                    invaderlaser2.handleCollision(e);
+                    e.handleCollision(invaderlaser2);
+                }
+                if (invaderlaser2.isCollide(e)) {
+                    invaderlaser2.handleCollision(e);
+                    e.handleCollision(invaderlaser2);
+                    invaderlaser.handleCollision(e);
+                    e.handleCollision(invaderlaser);
+                    invaderlaser2.handleCollision(e);
+                }
+            }
+        }
     }
+
 
     //Methods
 
@@ -176,6 +215,7 @@ public class GameScreen implements Screen {
         background.update(delta);
         start.update(delta);
         blackscreen.update(delta);
+        deathscreen.update(delta);
 
         if(!gameover && start.startGame && start.go) {
             player.update(delta);
@@ -214,9 +254,6 @@ public class GameScreen implements Screen {
             }
             invaderlaser.update(delta);
             invaderlaser2.update(delta);
-
-
-
 
             //Shoots laser based from player posx (only if off screen)
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !laser.InBound) {
@@ -268,41 +305,13 @@ public class GameScreen implements Screen {
             }
         }
 
+        //End of if !gameover statment
 
-
+        //Runs restart game method
         if(gameover){
             restartgame();
-
-            if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
-                start.startGame=true;
-                //start.showStart=false;
-                gameover=false;
-                for (Entity e : Entity.entities) {
-                    if (invaderlaser.isCollide(e)) {
-                        invaderlaser.handleCollision(e);
-                        e.handleCollision(invaderlaser);
-                        invaderlaser2.handleCollision(e);
-                        e.handleCollision(invaderlaser2);
-                    }
-                    if (invaderlaser2.isCollide(e)) {
-                        invaderlaser2.handleCollision(e);
-                        e.handleCollision(invaderlaser2);
-                        invaderlaser.handleCollision(e);
-                        e.handleCollision(invaderlaser);
-                        invaderlaser2.handleCollision(e);
-                    }
-                }
-                for (int i = 0; i <= (Invaders.numberofinvaders - 1); i++) {
-                    invaders[i].posx=i*75;
-                    invaders[i].posy=600;
-                    invaders[i].movingright=true;
-                }
-                for (int i = 0; i <= (Shield.numberofshields - 1); i++) {
-                    shield[i].height=(int)Shield.shieldheight;
-                    shield[i].posx=(i * MyGdxGame.V_WIDTH / (Shield.numberofshields + 1) + MyGdxGame.V_WIDTH / (Shield.numberofshields + 1) - (Shield.shieldwidth/2));
-                }
-            }
         }
+
         //End of update method
     }
 }

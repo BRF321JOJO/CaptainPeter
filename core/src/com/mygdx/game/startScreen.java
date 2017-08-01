@@ -38,12 +38,11 @@ public class startScreen extends Image{
             //Startscreen update whenever death
             posx = (MyGdxGame.V_WIDTH-335)/2;
             posy = (MyGdxGame.V_HEIGHT-335)/2;
-            vely=0;
+            vely = 0;
 
             //Starts game when press enter
             if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
                 startGame = true;
-                //showStart = true;
             }
         }
 
