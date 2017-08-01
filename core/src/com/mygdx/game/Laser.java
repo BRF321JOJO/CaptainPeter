@@ -16,6 +16,7 @@ public class Laser extends Entity{
     static int HoldingArea = 2000;
     static int laserheight = 30;
     int laserid=0;
+    Sound pew = Gdx.audio.newSound(Gdx.files.internal("Pew.mp3"));
 
     public Laser(SpriteBatch batch) {
         super (
@@ -65,5 +66,6 @@ public class Laser extends Entity{
     public void handleCollision(Entity e) {
         //If collides, set back to holding area to be able to be shot again
         posx = HoldingArea;
+        //pew.play();
     }
 }

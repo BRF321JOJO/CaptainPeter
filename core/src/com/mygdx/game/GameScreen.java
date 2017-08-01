@@ -13,6 +13,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import javax.xml.soap.Text;
+
 
 public class GameScreen implements Screen {
 
@@ -32,6 +34,10 @@ public class GameScreen implements Screen {
     boolean gameover;
     Laser invaderlaser2;
     int invaderjustshot;
+    bgm bgm;
+    startScreen start;
+    Texture rip;
+
 
     //Normal variables
 
@@ -48,7 +54,9 @@ public class GameScreen implements Screen {
         gamePort = new ExtendViewport(LEVEL_WIDTH, LEVEL_HEIGHT, gameCam);
         invaderlaser.HoldingArea=3000;
         invaderlaser.HoldingArea=4000;
-
+        bgm = new bgm();
+        start = new startScreen();
+        rip = new Texture("rip.png");
 
         //All following: Makes one or multiple new objects
         player = new Player(game.batch);
@@ -77,6 +85,7 @@ public class GameScreen implements Screen {
             Entity.entities.add(invaders[i]);
         }
         Entity.entities.add(player);
+        bgm.play();
     }
 
     @Override
@@ -104,6 +113,14 @@ public class GameScreen implements Screen {
         for (int i = 0; i<=(Invaders.numberofinvaders - 1); i++) {
             invaders[i].render();
         }
+        if(start.showStart) {
+            game.batch.draw(start.dark, start.darkx, start.darky);
+            game.batch.draw(start.texture, start.x, start.y);
+        }
+        if(gameover){
+            game.batch.draw(start.dark, start.darkx, start.darky);
+            game.batch.draw(rip, start.x, start.y);
+        }
         game.batch.end();
     }
 
@@ -123,7 +140,9 @@ public class GameScreen implements Screen {
 
     public void update(float delta) {
         //Update methods
-        if(!gameover) {
+        start.update();
+        if(!gameover && start.startGame&&start.go) {
+
             player.update(delta);
             laser.update(delta);
             for (int i = 0; i <= (Shield.numberofshields - 1); i++) {
@@ -205,6 +224,7 @@ public class GameScreen implements Screen {
                     }
                     if (e.ID == 2) {
                         gameover = true;
+                        start.startGame=false;
                         System.out.println(gameover);
 
                     }
@@ -213,7 +233,10 @@ public class GameScreen implements Screen {
             }
         }
         if(gameover){
+            start.startGame=false;
             if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
+                start.startGame=true;
+                start.showStart=false;
                 gameover=false;
                 for (Entity e : Entity.entities) {
                     if (invaderlaser.isCollide(e)) {

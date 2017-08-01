@@ -17,5 +17,7 @@ public class  DesktopLauncher {
 		cfg.vSyncEnabled=true;
 		//cfg.fullscreen=true;
 		new LwjglApplication(new MyGdxGame(), cfg);
+		cfg.addIcon("captpet icon.jpg", Files.FileType.Internal);
+		cfg.title="Captain Peter";
 	}
 }
