@@ -15,7 +15,6 @@ public class Laser extends Entity{
     boolean InBound;
     static int HoldingArea = 2000;
     static int laserheight = 30;
-    int laserid=0;
 
     public Laser(SpriteBatch batch) {
         super (
@@ -23,7 +22,7 @@ public class Laser extends Entity{
                     HoldingArea,
                     //Equal to height of player + posy of player
                     laserheight + Player.playerposy,
-                    10,
+                    8,
                     laserheight,
                     0,
                     8,
@@ -39,13 +38,11 @@ public class Laser extends Entity{
                 InBound = true;
             } else {InBound = false;}
 
-            if(laserid==0) {
-                if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !InBound) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !InBound) {
                     //Resets y position
                     posy = laserheight + Player.playerposy;
                     //posx of laser depends on Player posx. [In GameScreen, update method]
                     System.out.println("Pew, you shot a laser!");
-                }
             }
 
             //Moves laser up

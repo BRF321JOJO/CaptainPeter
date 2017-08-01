@@ -8,18 +8,19 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  */
 public class Invaders extends Entity{
 
-    //Need sprite page.
-
     static int numberofinvaders = 11;
     static int invaderswidth = 50;
     static boolean InBound;
     static boolean movingright = true;
     int counter = 0;
+    //Usually 75
+    static int spacebetween = 100;
     //Controls int counter for how often invader moves
-    int invadermovespeed = 25;
-    int invadermoveammount = 25;
-    int edgesofmovement = 20;
-    int ammountmovedown = 75;
+    static int invadermovespeed = 30;
+
+    int xmoveammount = 25;
+    static int edgesofmovement = 20;
+    static int ymoveammount = 75;
 
     public Invaders(SpriteBatch batch, int posx) {
         super(
@@ -30,11 +31,10 @@ public class Invaders extends Entity{
                 50,
                 0,
                 0,
-                1,
+                0,
                 batch
         );
     }
-
 
     public void update(float delta) {
 
@@ -57,22 +57,22 @@ public class Invaders extends Entity{
             if (InBound) {
                 //Goes right, and if is false, goes left
                 if (movingright) {
-                    posx += invadermoveammount;
-                } else if (!movingright) {
-                    posx -= invadermoveammount;
+                    posx += xmoveammount;
+                } else {
+                    posx -= xmoveammount;
                 }
 
                 //Following two if statements moves down and makes go opposite direction once close enough to sides
                 //Also, corrects for slow drift right and left
                 if (posx <= edgesofmovement) {
                     posx = edgesofmovement;
-                    posy -= ammountmovedown;
+                    posy -= ymoveammount;
                     movingright = true;
                 }
                 //(Corrects for width of invader)
                 if (posx >= MyGdxGame.V_WIDTH - edgesofmovement - invaderswidth) {
                     posx = MyGdxGame.V_WIDTH - edgesofmovement - invaderswidth;
-                    posy -= ammountmovedown;
+                    posy -= ymoveammount;
                     movingright = false;
                 }
             }

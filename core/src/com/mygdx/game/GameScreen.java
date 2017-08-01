@@ -21,20 +21,18 @@ public class GameScreen implements Screen {
     private Viewport gamePort;
     private final int LEVEL_WIDTH;
     private final int LEVEL_HEIGHT;
-    private Texture bg = new Texture("bg.jpg");
 
     //Initialized Objects: Order of spawning in
     Player player;
     Laser laser;
     Laser invaderlaser;
+    Laser invaderlaser2;
     Shield[] shield;
     Invaders[] invaders;
-    boolean gameover;
-    Laser invaderlaser2;
-    int invaderjustshot;
 
     //Normal variables
-
+    boolean gameover;
+    int invaderjustshot;
 
     //CONSTRUCTOR
     public GameScreen(MyGdxGame game) {
@@ -46,16 +44,20 @@ public class GameScreen implements Screen {
         LEVEL_HEIGHT = MyGdxGame.V_HEIGHT;
         gameCam = new OrthographicCamera();
         gamePort = new ExtendViewport(LEVEL_WIDTH, LEVEL_HEIGHT, gameCam);
-        invaderlaser.HoldingArea=3000;
-        invaderlaser.HoldingArea=4000;
+        invaderlaser.HoldingArea = 3000;
+        invaderlaser.HoldingArea = 4000;
 
 
         //All following: Makes one or multiple new objects
         player = new Player(game.batch);
         laser = new Laser(game.batch);
+
         invaderlaser = new Laser(game.batch);
-        shield = new Shield[Shield.numberofshields];
         invaderlaser2= new Laser(game.batch);
+        invaderlaser.vely=-8;
+        invaderlaser2.vely=-8;
+
+        shield = new Shield[Shield.numberofshields];
         for (int i = 0; i <= (Shield.numberofshields - 1); i++) {
             //Values based off screen width and number of shields
             //Must account for width of shield
@@ -66,9 +68,7 @@ public class GameScreen implements Screen {
             //Adds shield to entities
             Entity.entities.add(shield[i]);
         }
-        invaderlaser.vely=-8;
-        invaderlaser2.vely=-8;
-        invaderlaser.laserid=1;
+
         invaders = new Invaders[Invaders.numberofinvaders];
         for (int i = 0; i<=(Invaders.numberofinvaders - 1); i++) {
             invaders[i] = new Invaders(game.batch, (i * 75)
@@ -93,11 +93,12 @@ public class GameScreen implements Screen {
         game.batch.enableBlending();
 
         game.batch.begin();
-        game.batch.draw(bg, 0, 0, LEVEL_WIDTH, LEVEL_HEIGHT);
         player.render();
         laser.render();
+
         invaderlaser.render();
         invaderlaser2.render();
+
         for (int i = 0; i <= (Shield.numberofshields - 1); i++) {
             shield[i].render();
         }
@@ -134,7 +135,7 @@ public class GameScreen implements Screen {
             }
 
             //Methods of Game Screen
-            for (int i = 0; i <= (Invaders.numberofinvaders - 1); i++) {
+            for (int i=0; i<=(Invaders.numberofinvaders - 1); i++) {
 
                 if (((invaders[i].posx + invaders[i].width / 2) >= player.posx) && ((invaders[i].posx + invaders[i].width / 2) <= (player.posx + player.width)) && !invaderlaser.InBound) {
                     if(i!=invaderjustshot) {
