@@ -55,7 +55,7 @@ public class GameScreen implements Screen {
         invaderlaser.HoldingArea=3000;
         invaderlaser.HoldingArea=4000;
         Music = new Music();
-        start = new startScreen();
+        start = new startScreen(game.batch);
         rip = new Texture("rip.png");
 
         //All following: Makes one or multiple new objects
@@ -115,11 +115,12 @@ public class GameScreen implements Screen {
         }
         if(start.showStart) {
             game.batch.draw(start.dark, start.darkx, start.darky);
-            game.batch.draw(start.texture, start.x, start.y);
+
         }
+        start.render();
         if(gameover){
             game.batch.draw(start.dark, start.darkx, start.darky);
-            game.batch.draw(rip, start.x, start.y);
+            game.batch.draw(rip, start.posx, start.posy);
         }
         game.batch.end();
     }

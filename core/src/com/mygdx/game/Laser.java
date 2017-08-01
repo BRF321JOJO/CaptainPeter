@@ -40,7 +40,8 @@ public class Laser extends Entity{
                 InBound = true;
             } else {InBound = false;}
 
-            if(laserid==0) {
+            //Only works if (entity/player) laser
+            if(laserid == 0) {
                 if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !InBound) {
                     //Resets y position
                     posy = laserheight + Player.playerposy;
