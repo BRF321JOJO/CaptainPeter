@@ -22,17 +22,22 @@ public class GameScreen implements Screen {
     private final int LEVEL_HEIGHT;
 
     //Background
-    private Texture bg = new Texture("bg.jpg");
 
     //Initialized Objects: Order of spawning in
     Player player;
+
     Laser laser;
     Laser invaderlaser;
     Laser invaderlaser2;
+
     Shield[] shield;
     Invaders[] invaders;
     Music Music;
+
     startScreen start;
+    Blackscreen blackscreen;
+    Background background;
+
 
     //Deathscreen
     Texture rip;
@@ -40,22 +45,26 @@ public class GameScreen implements Screen {
 
     //Normal variables
     int invaderjustshot;
-    boolean gameover;
+    boolean gameover = false;
+
 
     //CONSTRUCTOR
     public GameScreen(MyGdxGame game) {
         this.game = game;
-        gameover=false;
-        invaderjustshot=2000;
 
         LEVEL_WIDTH = MyGdxGame.V_WIDTH;
         LEVEL_HEIGHT = MyGdxGame.V_HEIGHT;
         gameCam = new OrthographicCamera();
         gamePort = new ExtendViewport(LEVEL_WIDTH, LEVEL_HEIGHT, gameCam);
-        invaderlaser.HoldingArea=3000;
-        invaderlaser.HoldingArea=4000;
+
         Music = new Music();
+        Music.play();
+
+        //Startup screens
         start = new startScreen(game.batch);
+        blackscreen = new Blackscreen(game.batch);
+        background = new Background(game.batch);
+
         rip = new Texture("rip.png");
 
         //All following: Makes one or multiple new objects
@@ -74,9 +83,7 @@ public class GameScreen implements Screen {
             //Adds shield to entities
             Entity.entities.add(shield[i]);
         }
-        invaderlaser.vely=-8;
-        invaderlaser2.vely=-8;
-        invaderlaser.laserid=1;
+
         invaders = new Invaders[Invaders.numberofinvaders];
         for (int i = 0; i<=(Invaders.numberofinvaders - 1); i++) {
             invaders[i] = new Invaders(game.batch, (i * 75)
@@ -85,7 +92,20 @@ public class GameScreen implements Screen {
             Entity.entities.add(invaders[i]);
         }
         Entity.entities.add(player);
-        Music.play();
+
+
+        //Invder varibales
+        invaderlaser.vely=-8;
+        invaderlaser2.vely=-8;
+        invaderlaser.laserid=1;
+
+        //Defined variables
+        invaderlaser.HoldingArea=3000;
+        invaderlaser2.HoldingArea=4000;
+
+        //Makes to same invader doesn't shoot twicce
+        invaderjustshot=2000;
+
     }
 
     @Override
@@ -100,28 +120,33 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         //Allows images to be transparent
         game.batch.enableBlending();
-
         game.batch.begin();
-        game.batch.draw(bg, 0, 0, LEVEL_WIDTH, LEVEL_HEIGHT);
-        player.render();
+
+        background.render();
         laser.render();
         invaderlaser.render();
         invaderlaser2.render();
+        player.render();
+
+
         for (int i = 0; i <= (Shield.numberofshields - 1); i++) {
             shield[i].render();
         }
         for (int i = 0; i<=(Invaders.numberofinvaders - 1); i++) {
             invaders[i].render();
         }
-        if(start.showStart) {
-            game.batch.draw(start.dark, start.darkx, start.darky);
 
-        }
+        //if(start.showStart) {
+        blackscreen.render();
         start.render();
+        //}
+
         if(gameover){
-            game.batch.draw(start.dark, start.darkx, start.darky);
+            blackscreen.render();
             game.batch.draw(rip, start.posx, start.posy);
         }
+
+
         game.batch.end();
     }
 
@@ -137,13 +162,22 @@ public class GameScreen implements Screen {
     public void dispose() {}
 
 
+    public void restartgame () {
+        start.startGame = false;
+        blackscreen.vely = 0;
+        blackscreen.posx = 0;
+        blackscreen.posy = 0;
+    }
+
     //Methods
 
     public void update(float delta) {
         //Update methods
-        start.update();
-        if(!gameover && start.startGame&&start.go) {
+        background.update(delta);
+        start.update(delta);
+        blackscreen.update(delta);
 
+        if(!gameover && start.startGame && start.go) {
             player.update(delta);
             laser.update(delta);
             for (int i = 0; i <= (Shield.numberofshields - 1); i++) {
@@ -156,31 +190,31 @@ public class GameScreen implements Screen {
             //Methods of Game Screen
             for (int i = 0; i <= (Invaders.numberofinvaders - 1); i++) {
 
-                if (((invaders[i].posx + invaders[i].width / 2) >= player.posx) && ((invaders[i].posx + invaders[i].width / 2) <= (player.posx + player.width)) && !invaderlaser.InBound) {
+                //Aiming system
+                if (((invaders[i].posx + invaders[i].width / 2) >= player.posx) && ((invaders[i].posx + invaders[i].width / 2)
+                        <= (player.posx + player.width)) && !invaderlaser.InBound) {
                     if(i!=invaderjustshot) {
-                        System.out.println("true");
                         invaderlaser.posx = (invaders[i].posx + invaders[i].width / 2);
                         invaderlaser.posy = invaders[i].posy;
                         invaderlaser.vely = -10;
-                        System.out.println(invaderlaser.vely);
                         invaderjustshot = i;
                     }
                 }
 
 
-                if (((invaders[i].posx + invaders[i].width / 2) >= player.posx) && ((invaders[i].posx + invaders[i].width / 2) <= (player.posx + player.width)) && !invaderlaser2.InBound) {
+                if (((invaders[i].posx + invaders[i].width / 2) >= player.posx) && ((invaders[i].posx + invaders[i].width / 2)
+                        <= (player.posx + player.width)) && !invaderlaser2.InBound) {
                     if(i!=invaderjustshot) {
-                        System.out.println("true");
                         invaderlaser2.posx = (invaders[i].posx + invaders[i].width / 2);
                         invaderlaser2.posy = invaders[i].posy;
                         invaderlaser2.vely = -10;
-                        System.out.println(invaderlaser2.vely);
-                        invaderjustshot=i;
+                        invaderjustshot = i;
                     }
                 }
             }
             invaderlaser.update(delta);
             invaderlaser2.update(delta);
+
 
 
 
@@ -233,11 +267,15 @@ public class GameScreen implements Screen {
 
             }
         }
+
+
+
         if(gameover){
-            start.startGame=false;
+            restartgame();
+
             if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
                 start.startGame=true;
-                start.showStart=false;
+                //start.showStart=false;
                 gameover=false;
                 for (Entity e : Entity.entities) {
                     if (invaderlaser.isCollide(e)) {

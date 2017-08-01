@@ -10,13 +10,22 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  */
 public class startScreen extends Image{
 
+    static boolean startGame = false;
+    static boolean showStart = true;
+    static boolean go = false;
+    int starttime=1;
+    int startcounter=0;
+
+    static int width = 335;
+    static int height = 335;
+
     public startScreen(SpriteBatch batch) {
         super (
                 new Texture("start screen.png"),
-                (MyGdxGame.V_WIDTH-335)/2,
-                (MyGdxGame.V_HEIGHT-335)/2,
-                1280,
-                720,
+                (MyGdxGame.V_WIDTH - width)/2,
+                (MyGdxGame.V_HEIGHT - height)/2,
+                width,
+                height,
                 0,
                 0,
                 0,
@@ -24,30 +33,17 @@ public class startScreen extends Image{
         );
     }
 
-    boolean startGame = false;
-    boolean showStart = true;
-    boolean go;
-    int starttime=1;
-    int startcounter=0;
-
-    Texture dark = new Texture("dark.png");
-    Texture texture;
-    int darkx=0;
-    int darky=0;
-
-    public void update(){
+    public void update(float delta){
         if (!startGame) {
-            //Startscreen
-            posx=(MyGdxGame.V_WIDTH-335)/2;
-            posy=(MyGdxGame.V_HEIGHT-335)/2;
+            //Startscreen update whenever death
+            posx = (MyGdxGame.V_WIDTH-335)/2;
+            posy = (MyGdxGame.V_HEIGHT-335)/2;
             vely=0;
-            //Dark screen
-            darkx=0;
-            darky=0;
-            go=false;
+
+            //Starts game when press enter
             if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
                 startGame = true;
-                showStart = false;
+                //showStart = true;
             }
         }
 
@@ -58,9 +54,10 @@ public class startScreen extends Image{
                 go=true;
                 startcounter = 0;
             }
+
+            //Moves image offscreen downward when game starts
             vely++;
             posy-=vely;
-            darky-=vely;
         }
     }
 
