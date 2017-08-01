@@ -15,7 +15,6 @@ public class Laser extends Entity{
     boolean InBound;
     static int HoldingArea = 2000;
     static int laserheight = 30;
-    int laserid = 0;
     Sound pew = Gdx.audio.newSound(Gdx.files.internal("Pew.mp3"));
 
     public Laser(SpriteBatch batch) {
@@ -41,7 +40,7 @@ public class Laser extends Entity{
             } else {InBound = false;}
 
             //Only works if (entity/player) laser
-            if(laserid == 0) {
+            if(ID == 0) {
                 if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !InBound) {
                     //Resets y position
                     posy = laserheight + Player.playerposy;
@@ -49,6 +48,14 @@ public class Laser extends Entity{
                     pew.play();
                     System.out.println("Pew, you shot a laser!");
                 }
+            }
+
+            if (ID == 1) {
+
+            }
+
+            if (ID == 2) {
+
             }
 
             //Moves laser up

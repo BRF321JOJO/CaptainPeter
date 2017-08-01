@@ -69,7 +69,7 @@ public class GameScreen implements Screen {
         player = new Player(game.batch);
         laser = new Laser(game.batch);
         invaderlaser = new Laser(game.batch);
-        invaderlaser2= new Laser(game.batch);
+        invaderlaser2 = new Laser(game.batch);
 
         shield = new Shield[Shield.numberofshields];
         for (int i = 0; i <= (Shield.numberofshields - 1); i++) {
@@ -96,7 +96,6 @@ public class GameScreen implements Screen {
         //Invder varibales
         invaderlaser.vely = -8;
         invaderlaser2.vely = -8;
-        invaderlaser.laserid = 1;
 
         //Defined variables
         invaderlaser.HoldingArea = 3000;
