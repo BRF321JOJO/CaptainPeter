@@ -17,6 +17,7 @@ public class Laser extends Entity{
     static int laserheight = 30;
     int laserid = 0;
     Sound pew = Gdx.audio.newSound(Gdx.files.internal("Pew.mp3"));
+    Sound triboonal = Gdx.audio.newSound(Gdx.files.internal("triboonal.mp3"));
 
     public Laser(SpriteBatch batch) {
         super (
