@@ -6,14 +6,11 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
-import javax.xml.soap.Text;
 
 
 public class GameScreen implements Screen {
@@ -23,24 +20,27 @@ public class GameScreen implements Screen {
     private Viewport gamePort;
     private final int LEVEL_WIDTH;
     private final int LEVEL_HEIGHT;
+
+    //Background
     private Texture bg = new Texture("bg.jpg");
 
     //Initialized Objects: Order of spawning in
     Player player;
     Laser laser;
     Laser invaderlaser;
+    Laser invaderlaser2;
     Shield[] shield;
     Invaders[] invaders;
-    boolean gameover;
-    Laser invaderlaser2;
-    int invaderjustshot;
-    bgm bgm;
+    Music Music;
     startScreen start;
+
+    //Deathscreen
     Texture rip;
 
 
     //Normal variables
-
+    int invaderjustshot;
+    boolean gameover;
 
     //CONSTRUCTOR
     public GameScreen(MyGdxGame game) {
@@ -54,7 +54,7 @@ public class GameScreen implements Screen {
         gamePort = new ExtendViewport(LEVEL_WIDTH, LEVEL_HEIGHT, gameCam);
         invaderlaser.HoldingArea=3000;
         invaderlaser.HoldingArea=4000;
-        bgm = new bgm();
+        Music = new Music();
         start = new startScreen();
         rip = new Texture("rip.png");
 
@@ -85,7 +85,7 @@ public class GameScreen implements Screen {
             Entity.entities.add(invaders[i]);
         }
         Entity.entities.add(player);
-        bgm.play();
+        Music.play();
     }
 
     @Override

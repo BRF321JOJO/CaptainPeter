@@ -17,7 +17,7 @@ public class startScreen {
     int yvel;
     Texture texture;
     boolean showStart=true;
-    Texture dark= new Texture("dark.png");
+    Texture dark = new Texture("dark.png");
     int startcounter=0;
     boolean go=false;
     int starttime=1;

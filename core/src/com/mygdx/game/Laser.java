@@ -15,7 +15,7 @@ public class Laser extends Entity{
     boolean InBound;
     static int HoldingArea = 2000;
     static int laserheight = 30;
-    int laserid=0;
+    int laserid = 0;
     Sound pew = Gdx.audio.newSound(Gdx.files.internal("Pew.mp3"));
 
     public Laser(SpriteBatch batch) {
@@ -45,6 +45,7 @@ public class Laser extends Entity{
                     //Resets y position
                     posy = laserheight + Player.playerposy;
                     //posx of laser depends on Player posx. [In GameScreen, update method]
+                    pew.play();
                     System.out.println("Pew, you shot a laser!");
                 }
             }
@@ -66,6 +67,5 @@ public class Laser extends Entity{
     public void handleCollision(Entity e) {
         //If collides, set back to holding area to be able to be shot again
         posx = HoldingArea;
-        //pew.play();
     }
 }

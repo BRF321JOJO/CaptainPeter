@@ -30,6 +30,7 @@ public class Invaders extends Entity{
                 50,
                 0,
                 0,
+                //ID 1 indicates enemy
                 1,
                 batch
         );
