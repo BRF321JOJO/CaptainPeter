@@ -12,8 +12,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Laser extends Entity{
 
-    boolean InBound;
-    static int HoldingArea = 2000;
+    boolean xInBound;
+    boolean yInBound;
+
+    static int HoldingArea = 1500;
     static int laserheight = 30;
     Sound pew = Gdx.audio.newSound(Gdx.files.internal("Pew.mp3"));
 
@@ -34,20 +36,34 @@ public class Laser extends Entity{
 
         public void update(float delta) {
 
-            //Defines InBound
-            if ((posx >=0) && (posx <= 1280)) {
-                InBound = true;
-            } else {InBound = false;}
+            //Defines inbound values
 
-            //Only works if (entity/player) laser
+            //Defines xInBound
+            if ((posx >=0) && (posx <= MyGdxGame.V_WIDTH)) {
+                xInBound = true;
+            } else {xInBound = false;}
+
+            //Defined yInBound
+            if ((posy >= 0) && (posy <= MyGdxGame.V_HEIGHT)) {
+                yInBound = true;
+            } else {yInBound = false;}
+
+
+            //Only works if player laser (not invader)
             if(ID == 0) {
-                if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !InBound) {
+                if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !xInBound) {
                     //Resets y position
                     posy = laserheight + Player.playerposy;
                     //posx of laser depends on Player posx. [In GameScreen, update method]
-                    pew.play();
+                    if (Debug.pewsound) {
+                        pew.play();
+                    }
                     System.out.println("Pew, you shot a laser!");
                 }
+            }
+
+            if (ID > 0) {
+                //velx = -velx;
             }
 
             if (ID == 1) {
@@ -59,12 +75,12 @@ public class Laser extends Entity{
             }
 
             //Moves laser up
-            if(InBound){
+            if(xInBound){
                 posy+= vely;
             }
 
             //Puts laser back to hold area once off screen
-            if (posy >= MyGdxGame.V_HEIGHT || posy<=0) {
+            if (posy >= MyGdxGame.V_HEIGHT) {
                 posx = HoldingArea;
             }
         }

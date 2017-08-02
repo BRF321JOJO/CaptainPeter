@@ -10,7 +10,7 @@ public class Background extends Image{
 
     public Background(SpriteBatch batch) {
         super (
-                new Texture("bg.jpg"),
+                new Texture("Background.jpg"),
                 0,
                 0,
                 MyGdxGame.V_WIDTH,

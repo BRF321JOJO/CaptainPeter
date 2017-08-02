@@ -13,7 +13,7 @@ public class Deathscreen extends Image{
 
     public Deathscreen(SpriteBatch batch) {
         super (
-                new Texture("rip.png"),
+                new Texture("Deathscreen.png"),
                 (MyGdxGame.V_WIDTH - width)/2,
                 (MyGdxGame.V_HEIGHT - width)/2,
                 width,

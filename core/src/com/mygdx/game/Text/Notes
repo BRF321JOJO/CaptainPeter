@@ -1,0 +1,8 @@
+Can make all laser values within laser class by just changing the ID within the class
+Therefore can just render all lasers at once
+
+Bugs:
+When invaders touch ends of movement, invert order. (Test by shooting invaders in middle).
+When invaders touch ends of movement, move in designated space instead of based on how many left
+Can play laser sound multiple times at start. (Afterwards doesn't happen). Likely has something to do with the id with laser issue.
+Invaders stop shooting laser after some time.

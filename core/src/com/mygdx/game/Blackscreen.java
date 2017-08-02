@@ -1,5 +1,4 @@
 package com.mygdx.game;
-
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -24,7 +23,7 @@ public class Blackscreen extends Image {
 
     public void update(float delta) {
 
-        if (startScreen.startGame){
+        if (Startscreen.startGame && GameScreen.slideblackbackground){
             vely++;
             posy-=vely;
         }

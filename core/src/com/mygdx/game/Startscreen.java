@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 /**
  * Created by ahuja on 3/12/2017.
  */
-public class startScreen extends Image{
+public class Startscreen extends Image{
 
     static boolean startGame = false;
     static boolean showStart = true;
@@ -19,9 +19,9 @@ public class startScreen extends Image{
     static int width = 335;
     static int height = 335;
 
-    public startScreen(SpriteBatch batch) {
+    public Startscreen(SpriteBatch batch) {
         super (
-                new Texture("start screen.png"),
+                new Texture("Startscreen.png"),
                 (MyGdxGame.V_WIDTH - width)/2,
                 (MyGdxGame.V_HEIGHT - height)/2,
                 width,

@@ -10,6 +10,7 @@ public class Invaders extends Entity{
 
     //Need sprite page.
 
+    static int HoldingArea = 2000;
     static int numberofinvaders = 11;
     static int invaderswidth = 50;
     static boolean InBound;
@@ -17,9 +18,10 @@ public class Invaders extends Entity{
     int counter = 0;
     //Controls int counter for how often invader moves
     int invadermovespeed = 25;
-    int invadermoveammount = 25;
-    int edgesofmovement = 20;
-    int ammountmovedown = 75;
+    static int invadermoveammount = 25;
+    static int edgesofmovement = invadermoveammount;
+    static int ammountmovedown = 50;
+    static int spacebetween = 30 + invaderswidth;
 
     public Invaders(SpriteBatch batch, int posx) {
         super(
@@ -62,22 +64,10 @@ public class Invaders extends Entity{
                 } else if (!movingright) {
                     posx -= invadermoveammount;
                 }
-
-                //Following two if statements moves down and makes go opposite direction once close enough to sides
-                //Also, corrects for slow drift right and left
-                if (posx <= edgesofmovement) {
-                    posx = edgesofmovement;
-                    posy -= ammountmovedown;
-                    movingright = true;
-                }
-                //(Corrects for width of invader)
-                if (posx >= MyGdxGame.V_WIDTH - edgesofmovement - invaderswidth) {
-                    posx = MyGdxGame.V_WIDTH - edgesofmovement - invaderswidth;
-                    posy -= ammountmovedown;
-                    movingright = false;
-                }
             }
         }
+
+        //Moving invaders down in gamescreen method
     }
 
     @Override
@@ -85,6 +75,6 @@ public class Invaders extends Entity{
     @Override
     public void handleCollision(Entity e) {
         //Moves offscreen if hit
-        posx = Laser.HoldingArea;
+        posx = HoldingArea;
     }
 }
